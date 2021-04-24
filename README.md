@@ -1,6 +1,6 @@
 # Codeforces-Contest-Fetcher (Need to change the name)
 
-### Dependencies
+### Required Python Libraries
 * os
 * sys
 * time
