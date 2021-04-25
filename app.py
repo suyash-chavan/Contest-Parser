@@ -41,11 +41,19 @@ def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contes
     inp = soup.findAll('div', attrs={"class" : "input"})
     out = soup.findAll('div', attrs={"class" : "output"})
 
+    input_folder_name = os.path.join(prob_folder_name, "Input")
+    output_folder_name = os.path.join(prob_folder_name, "Output")
+
+    # Creating Input and Output folder
+    os.mkdir(input_folder_name)
+    os.mkdir(output_folder_name)
+
+    #Input in Input folder and Output in Output folder
     for i in range(len(inp)):
         i_file = "in"+str(i+1)+".txt"
         o_file = "out"+str(i+1)+".txt"
-        i_file = os.path.join(prob_folder_name,i_file)
-        o_file = os.path.join(prob_folder_name,o_file)
+        i_file = os.path.join(input_folder_name,i_file)
+        o_file = os.path.join(output_folder_name,o_file)
         test_in = open(i_file, "a")
         test_out = open(o_file,"a")
 

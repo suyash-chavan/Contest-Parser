@@ -4,20 +4,17 @@ import re
 import filecmp
 from termcolor import colored
 
+input_path = os.path.join(os.getcwd(),"Input/")
+output_path = os.path.join(os.getcwd(),"Output/")
 
-files = [f for f in os.listdir('.') if os.path.isfile(f)]
+i_files = [f for f in os.listdir(input_path) if os.path.isfile(input_path+f)]
+o_files = [f for f in os.listdir(output_path) if os.path.isfile(output_path+f)]
+files = [f for f in os.listdir('./') if os.path.isfile(f)]
 
-i_files = []
-o_files = []
 code_file = ""
 
 for file in files:
-	if(re.search("^in[1-9].txt",file) or re.search("^in[1-9][1-9].txt",file)):
-		i_files.append(file)
-
-	if(re.search("^out[1-9].txt",file) or re.search("^out[1-9][1-9].txt",file)):
-		o_files.append(file)
-
+	# Get code file
 	if(re.search(".cpp$",file)):
 		code_file = file
 
@@ -41,13 +38,15 @@ for file_no in range(1,len(i_files)+1):
 
 	temp_out_files.append(temp_out)
 
+	tc_path = "'"+input_path+i_files[file_no-1]+"'"
+
 	# Run the input filr
-	os.system("./"+code_file[:-4]+" < "+i_files[file_no-1]+" > "+temp_out)
+	os.system("./"+code_file[:-4]+" < "+tc_path+" > "+temp_out)
 
 # Check if Output is same as expected Output
 for i in range(len(o_files)):
 
-	if(filecmp.cmp(o_files[i],temp_out_files[i])):
+	if(filecmp.cmp(output_path+o_files[i],temp_out_files[i])):
 		print("Test Case "+str(i+1)+": PASSED")
 	else:
 		print("Test Case "+str(i+1)+": FAILED")
