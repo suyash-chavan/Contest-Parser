@@ -1,4 +1,4 @@
-# Codeforces-Contest-Fetcher (Need to change the name)
+# Contest Parser (Need to change the name)
 
 ### Required Python Libraries
 * os
