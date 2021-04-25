@@ -4,6 +4,20 @@ import re
 import filecmp
 from termcolor import colored
 
+def check(program_out,expected_out):
+
+	"""
+		User can edit this function for check if the output is correct. By default this function will return
+		"PASSED" if program output exactly matches to expected output.
+
+		User needs to edit this function for problems where Multiple Correct Outputs are accepted.
+	"""
+
+	if(program_out==expected_out):
+		return "PASSED"
+
+	return "FAILED"
+
 input_path = os.path.join(os.getcwd(),"Input/")
 output_path = os.path.join(os.getcwd(),"Output/")
 
@@ -46,9 +60,18 @@ for file_no in range(1,len(i_files)+1):
 # Check if Output is same as expected Output
 for i in range(len(o_files)):
 
-	if(filecmp.cmp(output_path+o_files[i],temp_out_files[i])):
-		print("Test Case "+str(i+1)+": PASSED")
-	else:
-		print("Test Case "+str(i+1)+": FAILED")
+	# Getting Program Output
+	fname = open(temp_out_files[i],"r")
+	output = fname.read().strip()
+	fname.close()
+
+	# Getting Expected Output
+	fname = open(output_path+o_files[i],"r")
+	expected_output = fname.read().strip()
+	fname.close()
+
+	print("Test Case "+str(i+1)+": ",end='')
+
+	print(check(output,expected_output))
 
 	os.remove(temp_out_files[i])
