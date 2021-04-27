@@ -1,0 +1,10 @@
+{
+	"workspaces": 
+	[
+		{"name": "Codeforces", "path":"/home/suyash/"}
+	],
+	"programming-languages":
+	[
+		{"name": "C++", "compilation-command": "g++ file_name_extension -o file_name"}
+	]
+}
