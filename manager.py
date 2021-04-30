@@ -7,8 +7,6 @@ from termcolor import colored
 
 current_working_workspace = None
 
-# Let's Bind buttons with events for real console feel
-
 def list_workspaces(para,need_data):
 	
 	try:
@@ -117,7 +115,19 @@ def current_workspace(para):
 	print("Workspace ID: {}, Name: {}, Path: '{}'".format(current_working_workspace[0],current_working_workspace[1],current_working_workspace[2]))
 
 
-def do_it(main_command,flag_parametres):
+def check_flags(user_flags, valid_flags):
+
+	for flag in user_flags:
+		if(flag not in valid_flags):
+			print("Invalid Command!")
+			return False
+		elif((user_flags[flag]==None and valid_flags[flag]!=None) or (user_flags[flag]!=None and valid_flags[flag]==None)):
+			print("Invalid Command!")
+			return False
+
+	return True
+
+def verify_and_execute(main_command,flag_parametres):
 
 	# Hardcoded valid main commands list
 	# Dictionary of Main Command and valid flags
@@ -130,60 +140,38 @@ def do_it(main_command,flag_parametres):
 		print("Invalid Command!")
 		return None
 
-	#!!!!!!!!! Need to create a function for it
-
 	# Now we need to handle both 
 	if(main_command=="list workspaces"):
 
 		# Flag validity and type checking
-		for flag in flag_parametres:
-			if(flag not in valid_main_commands[main_command]):
-				print("Invalid Command!")
-				return None
-			elif((flag_parametres[flag]==None and valid_main_commands[main_command][flag]!=None) or (flag_parametres[flag]!=None and valid_main_commands[main_command][flag]==None)):
-				print("Invalid Command!")
-				return None
-
-		list_workspaces(flag_parametres,False)
+		if(check_flags(flag_parametres,valid_main_commands["list workspaces"])):
+			list_workspaces(flag_parametres,False)
+		else:
+			return None
 
 	elif(main_command=="set workspace"):
 
 		# Flag validity and type checking
-		for flag in flag_parametres:
-			if(flag not in valid_main_commands[main_command]):
-				print("Invalid Command!")
-				return None
-			elif((flag_parametres[flag]==None and valid_main_commands[main_command][flag]!=None) or (flag_parametres[flag]!=None and valid_main_commands[main_command][flag]==None)):
-				print("Invalid Command!")
-				return None
-
-		set_workspace(flag_parametres)
+		if(check_flags(flag_parametres,valid_main_commands["set workspace"])):
+			set_workspace(flag_parametres)
+		else:
+			return None
 
 	elif(main_command=="current workspace"):
 
 		# Flag validity and type checking
-		for flag in flag_parametres:
-			if(flag not in valid_main_commands[main_command]):
-				print("Invalid Command!")
-				return None
-			elif((flag_parametres[flag]==None and valid_main_commands[main_command][flag]!=None) or (flag_parametres[flag]!=None and valid_main_commands[main_command][flag]==None)):
-				print("Invalid Command!")
-				return None
-
-		current_workspace(flag_parametres)
+		if(check_flags(flag_parametres,valid_main_commands["current workspace"])):
+			current_workspace(flag_parametres)
+		else:
+			return None
 
 	elif(main_command=="create workspace"):
 
 		# Flag validity and type checking
-		for flag in flag_parametres:
-			if(flag not in valid_main_commands[main_command]):
-				print("Invalid Command!")
-				return None
-			elif((flag_parametres[flag]==None and valid_main_commands[main_command][flag]!=None) or (flag_parametres[flag]!=None and valid_main_commands[main_command][flag]==None)):
-				print("Invalid Command!")
-				return None
-
-		create_workspace(flag_parametres)
+		if(check_flags(flag_parametres,valid_main_commands["create workspace"])):
+			create_workspace(flag_parametres)
+		else:
+			return None
 
 
 def parse_command(command):
@@ -219,7 +207,7 @@ def parse_command(command):
 			except Exception:
 				flag_parametres[command[idx]]=None
 
-	do_it(" ".join(main_command),flag_parametres)
+	verify_and_execute(" ".join(main_command),flag_parametres)
 
 def start_cmd():
 
