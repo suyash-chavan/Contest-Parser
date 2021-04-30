@@ -1,10 +1,21 @@
 {
+	"_comment":
+	[
+		{"file_name_extension": "It is just a file in which code is written with extension."},
+		{"file_name": "This is compiled file. May not be applicable in some languages."},
+		{"input_file": "Input file with extension."},
+		{"output_file": "Output file with extension."}
+	],
+
 	"workspaces": 
 	[
-		{"name": "Codeforces", "path":"/home/suyash/"}
+		{"name": "Codeforces", "path":"/home/suyash/"},
+		{"name": "Codechef", "path":"/home/suyash/codechef"}
 	],
+
 	"programming-languages":
 	[
-		{"name": "C++", "compilation-command": "g++ file_name_extension -o file_name"}
+		{"name": "C++", "compilation-command": "g++ file_name_extension -o file_name", "run-command": "./file_name < input_file > output_file"},
+		{"name": "Python", "compilation-command": "None", "run-command": "cat input_file | python3 file_name_extension > output_file"}
 	]
 }

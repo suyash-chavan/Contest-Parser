@@ -6,13 +6,15 @@ from termcolor import colored
 
 current_working_workspace = None
 
-def list_workspaces():
+# Let's Bind buttons with events for real console feel
+
+def list_workspaces(need_data):
 	
 	try:
 		settings_file = open("settings.json","r")
 	except Exception:
 		print("Missing settings.json")
-		return 
+		return None
 
 	settings = json.load(settings_file)
 
@@ -29,7 +31,7 @@ def list_workspaces():
 
 	if(len(workspace_list)==1):
 		print("No Workspace Created!")
-		return
+		return None
 
 	col_width = [0 for _ in range(len(workspace_list[0]))]
 
@@ -45,6 +47,11 @@ def list_workspaces():
 		for col in range(len(row)):
 			print(row[col].ljust(col_width[col]+2),end='')
 		print()
+
+	if(need_data):
+		return workspace_list
+
+	return None
 
 def create_workspace():
 	
@@ -73,23 +80,108 @@ def create_workspace():
 		return 
 
 	if(not os.path.isdir(workspace_path)):
-		return 
+		return None
 		# Ask if you want yo create directory and if want create directory else return
+
+def set_workspace():
+	workspace_list = list_workspaces(need_data = True)
+
+	if(workspace_list==None):
+		print("Cannot set Workspace!")
+		return None
+
+	print()
+
+	try:
+		workspace_id = int(input("Enter Workspace ID: "))
+	except Exception:
+		print("Invalid Workspace ID!")
+		return None
+
+	max_id = len(workspace_list)-2
+
+	if(workspace_id<1 or workspace_id>max_id):
+		print("Invalid Workspace ID!")
+		return None
+
+	global current_working_workspace
+
+	current_working_workspace = workspace_list[workspace_id+1]
+
+	print()
+	print("Workspace Set Successfully!")
+
+	return None
+
+def current_workspace():
+
+	if(current_working_workspace==None):
+		print("Workspace Not Set!")
+		return None
+
+	print()
+
+	print("Workspace ID: {}, Name: {}, Path: '{}'".format(current_working_workspace[0],current_working_workspace[1],current_working_workspace[2]))
+
+
+def do_it(main_command,flag_parametres):
+	return None
+	# Handle All the command and parametres
+
+def parse_command(command):
+
+	if(len(command)==0):
+		return None
+
+	main_command = []
+
+	for word in command:
+		if(word[0]!='-'):
+			main_command.append(word)
+		else:
+			break
+
+	if(len(main_command)==0 or main_command[-1][0]=="-"):
+		print("Invalid Command!")
+		return None
+
+	flag_parametres = {}
+
+	for idx in range(0,len(command)):
+		if(command[idx][0]=='-'):
+			try:
+				if(command[idx+1][0]=='-'):
+					flag_parametres[command[idx]] = None
+				else:
+					if(command[idx] not in flag_parametres):
+						flag_parametres[command[idx]] = command[idx+1]
+					else:
+						print("Invalid Command!")
+						return None
+			except Exception:
+				flag_parametres[command[idx]]=None
+
+	do_it(main_command,flag_parametres)
 
 def start_cmd():
 
 	print()
-	print(">> ",end='')
+
+	if(current_working_workspace==None):
+		print(colored("┌──(",'green')+colored('\033[1m'+"!"+'\033[0m','blue')+colored(")-[",'green')+'\033[1m'+"!"+'\033[0m'+colored("]",'green'))
+		print(colored("└─$ ",'green'),end='')
+	else:
+		print(colored("┌──(",'green')+colored('\033[1m'+current_working_workspace[1]+'\033[0m','blue')+colored(")-[",'green')+'\033[1m'+current_working_workspace[2]+'\033[0m'+colored("]",'green'))
+		print(colored("└─$ ",'green'),end='')
 
 	command = input()
 
-	if(command=="list workspaces"):
-		list_workspaces()
-	elif(command=="create workspace"):
-		create_workspace()
-	else:
-		print("Invalid Command!")
+	command.rstrip()
+	command.lstrip()
 
+	command = command.split()
+
+	parse_command(command)
 
 if __name__=="__main__":
 
