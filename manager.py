@@ -2,13 +2,14 @@ import os
 import sys
 import json
 import re
+from prettytable import PrettyTable
 from termcolor import colored
 
 current_working_workspace = None
 
 # Let's Bind buttons with events for real console feel
 
-def list_workspaces(need_data):
+def list_workspaces(para,need_data):
 	
 	try:
 		settings_file = open("settings.json","r")
@@ -23,37 +24,29 @@ def list_workspaces(need_data):
 	workspace_no = 1
 	workspace_list = []
 
-	workspace_list.append(["ID","Workspace Name","Path"])
+	workspaces_table = PrettyTable()
+
+	workspaces_table.field_names = ["ID","Workspace Name","Path"]
 
 	for workspace in settings["workspaces"]:
 		workspace_list.append([str(workspace_no),workspace["name"],workspace["path"]])
+		workspaces_table.add_row([str(workspace_no),workspace["name"],workspace["path"]])
 		workspace_no+=1
 
-	if(len(workspace_list)==1):
+	if(len(workspace_list)==0):
 		print("No Workspace Created!")
 		return None
 
-	col_width = [0 for _ in range(len(workspace_list[0]))]
-
-	for row in workspace_list:
-		for col in range(len(row)):
-			col_width[col] = max(col_width[col],len(row[col]))
-
-	workspace_list.insert(1,["".join("-" for _ in range(dashes)) for dashes in col_width])
-
 	print()
 
-	for row in workspace_list:
-		for col in range(len(row)):
-			print(row[col].ljust(col_width[col]+2),end='')
-		print()
+	print(workspaces_table)
 
 	if(need_data):
 		return workspace_list
 
 	return None
 
-def create_workspace():
+def create_workspace(para):
 	
 	try:
 		settings_file = open("settings.json","r")
@@ -83,8 +76,8 @@ def create_workspace():
 		return None
 		# Ask if you want yo create directory and if want create directory else return
 
-def set_workspace():
-	workspace_list = list_workspaces(need_data = True)
+def set_workspace(para):
+	workspace_list = list_workspaces({},True)
 
 	if(workspace_list==None):
 		print("Cannot set Workspace!")
@@ -98,7 +91,7 @@ def set_workspace():
 		print("Invalid Workspace ID!")
 		return None
 
-	max_id = len(workspace_list)-2
+	max_id = len(workspace_list)
 
 	if(workspace_id<1 or workspace_id>max_id):
 		print("Invalid Workspace ID!")
@@ -106,14 +99,14 @@ def set_workspace():
 
 	global current_working_workspace
 
-	current_working_workspace = workspace_list[workspace_id+1]
+	current_working_workspace = workspace_list[workspace_id-1]
 
 	print()
 	print("Workspace Set Successfully!")
 
 	return None
 
-def current_workspace():
+def current_workspace(para):
 
 	if(current_working_workspace==None):
 		print("Workspace Not Set!")
@@ -125,8 +118,73 @@ def current_workspace():
 
 
 def do_it(main_command,flag_parametres):
-	return None
-	# Handle All the command and parametres
+
+	# Hardcoded valid main commands list
+	# Dictionary of Main Command and valid flags
+	valid_main_commands = {"list workspaces":{},
+						   "set workspace":{},
+						   "current workspace":{},
+						   "create workspace":{}}
+
+	if(main_command not in valid_main_commands):
+		print("Invalid Command!")
+		return None
+
+	#!!!!!!!!! Need to create a function for it
+
+	# Now we need to handle both 
+	if(main_command=="list workspaces"):
+
+		# Flag validity and type checking
+		for flag in flag_parametres:
+			if(flag not in valid_main_commands[main_command]):
+				print("Invalid Command!")
+				return None
+			elif((flag_parametres[flag]==None and valid_main_commands[main_command][flag]!=None) or (flag_parametres[flag]!=None and valid_main_commands[main_command][flag]==None)):
+				print("Invalid Command!")
+				return None
+
+		list_workspaces(flag_parametres,False)
+
+	elif(main_command=="set workspace"):
+
+		# Flag validity and type checking
+		for flag in flag_parametres:
+			if(flag not in valid_main_commands[main_command]):
+				print("Invalid Command!")
+				return None
+			elif((flag_parametres[flag]==None and valid_main_commands[main_command][flag]!=None) or (flag_parametres[flag]!=None and valid_main_commands[main_command][flag]==None)):
+				print("Invalid Command!")
+				return None
+
+		set_workspace(flag_parametres)
+
+	elif(main_command=="current workspace"):
+
+		# Flag validity and type checking
+		for flag in flag_parametres:
+			if(flag not in valid_main_commands[main_command]):
+				print("Invalid Command!")
+				return None
+			elif((flag_parametres[flag]==None and valid_main_commands[main_command][flag]!=None) or (flag_parametres[flag]!=None and valid_main_commands[main_command][flag]==None)):
+				print("Invalid Command!")
+				return None
+
+		current_workspace(flag_parametres)
+
+	elif(main_command=="create workspace"):
+
+		# Flag validity and type checking
+		for flag in flag_parametres:
+			if(flag not in valid_main_commands[main_command]):
+				print("Invalid Command!")
+				return None
+			elif((flag_parametres[flag]==None and valid_main_commands[main_command][flag]!=None) or (flag_parametres[flag]!=None and valid_main_commands[main_command][flag]==None)):
+				print("Invalid Command!")
+				return None
+
+		create_workspace(flag_parametres)
+
 
 def parse_command(command):
 
@@ -161,7 +219,7 @@ def parse_command(command):
 			except Exception:
 				flag_parametres[command[idx]]=None
 
-	do_it(main_command,flag_parametres)
+	do_it(" ".join(main_command),flag_parametres)
 
 def start_cmd():
 
