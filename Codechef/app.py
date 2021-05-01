@@ -57,17 +57,13 @@ for i in range(1, len(lstOfProblemLinks)):
 
 theProblemURLs = []
 
-for i in range(len(lstOfProblemLinks)):
-    if i == 0:
-        continue
+for i in range(1, len(lstOfProblemLinks)):
     theProblemURLs.append("https://www.codechef.com"+lstOfProblemLinks[i].split("\"")[3])
 
 #<a href="/contests/">Compete</a>&nbsp;»&nbsp;Spider AlgoCup</aside>
 contest_name = re.findall(r"\/contests\/\"\>Compete\<\/a.*?\<\/aside\>", contestPage, re.DOTALL)[0]
 contest_name = contest_name.split(";")[2].split("<")[0]
 
-# Problem URL for contest
-# contest_problem_url = 'https://www.codechef.com/{}/'.format(contest_id)
 browser.quit()
 # # Extract i/o statements for the problem
 def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contest_id):
@@ -104,7 +100,8 @@ def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contes
 
 # Create Problem folders
 def create_problem_folder(prob_no, prob_name,contest_problem_url,folder_name,extension,template_txt,contest_id,checker):
-    print("Problem: "+prob_no+". "+prob_name)
+    prob_no = str(prob_no)
+    print("Problem: "+str(prob_no)+". "+prob_name)
     contest_problem_url = contest_problem_url +  prob_no
 
     # Problem Folder
@@ -168,7 +165,7 @@ print("------------------------------------------------\n")
 folder_name = get_folder_name(contest_name)
 
 # Extract the Datatable
-problems = lstOfProblemLinks
+problems = theProblemURLs
 
 # Parse the Template
 fname = open('template.cpp', "r")
@@ -190,16 +187,18 @@ prob_x = []
 
 for i in range(len(problems)):
     #For every contest
-    txt = problems[i].text.strip()
-    prob_no = problems[i].text.strip()
+    # txt = problems[i].text.strip()
+    # prob_no = problems[i].text.strip()
     
-    prob_name = problems[i+1].text.strip()
-    prob_x.append(prob_no)
+    # prob_name = problems[i+1].text.strip()
+    # prob_x.append(prob_no)
 
-    prob_folder_name = prob_name
+    # prob_folder_name = prob_name
 
-    for str_char in illegal:
-        prob_folder_name = prob_folder_name.replace(str_char," ")
-
+    # for str_char in illegal:
+    #     prob_folder_name = prob_folder_name.replace(str_char," ")
+    prob_no = i+1
+    prob_folder_name = problemNames[i]
+    contest_problem_url = problems[i]
     create_problem_folder(prob_no,prob_folder_name,contest_problem_url,folder_name,extension,template_txt,contest_id,checker)
 
