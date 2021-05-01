@@ -42,9 +42,17 @@ sleep(1)
 
 contestPage = browser.page_source
 
+#<a id="ember359" class="ember-view" href="/SALC2021/problems/ALGOCUP2" title="Check The Constraints">Check The Constraints</a>
+
+
 # Get Contest Page
 lstOfProblemLinks = re.findall(r"class\=\"ember\-view\" href\=\"\/.*\<\/a\>", contestPage)
 
+# 'class="ember-view" href="/SALC2021/problems/ALGOCUP4" title="Save Sattu">Save Sattu</a>'
+problemNames = []
+for i in range(1, len(lstOfProblemLinks)):
+    problemNames.append(lstOfProblemLinks[i].split("\"")[5])
+    
 # ignore 1st instance
 
 theProblemURLs = []
@@ -60,7 +68,7 @@ contest_name = contest_name.split(";")[2].split("<")[0]
 
 # Problem URL for contest
 # contest_problem_url = 'https://www.codechef.com/{}/'.format(contest_id)
-
+browser.quit()
 # # Extract i/o statements for the problem
 def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contest_id):
 
@@ -151,8 +159,6 @@ def get_folder_name(contest_name):
 
 #---------------------------------MAIN---------------------------------------------#
 #Extract the contest-details
-tables = soup.findAll('table')
-#contest_name = tables[0].find('a').text.strip()
 print("\n------------------------------------------------")
 print("\nContest Name: "+contest_name)
 print("\nContest Link: "+contest_url+"\n")
@@ -162,7 +168,7 @@ print("------------------------------------------------\n")
 folder_name = get_folder_name(contest_name)
 
 # Extract the Datatable
-problems = soup.find('div', attrs={"class":"datatable"}).find('table').findAll('a')
+problems = lstOfProblemLinks
 
 # Parse the Template
 fname = open('template.cpp', "r")
@@ -184,9 +190,6 @@ prob_x = []
 
 for i in range(len(problems)):
     #For every contest
-    if i%4 !=0 : 
-        continue
-
     txt = problems[i].text.strip()
     prob_no = problems[i].text.strip()
     
@@ -200,4 +203,3 @@ for i in range(len(problems)):
 
     create_problem_folder(prob_no,prob_folder_name,contest_problem_url,folder_name,extension,template_txt,contest_id,checker)
 
-browser.quit()
