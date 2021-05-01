@@ -1,5 +1,6 @@
 # Contest Parser
-![Discord Shield](https://discordapp.com/api/guilds/813026414571290626/widget.png?style=shield)
+<a href="https://discord.gg/HNhdsnbTb5"><img src="https://discordapp.com/api/guilds/[SERVER ID]/widget.png?style=banner2" alt="Discord Banner 2"/></a>
+
 ### About
 * Contest Parser is a tool that can be used for Codeforces and Codechef Live contests, to quickly generate input, outupt files for sample test cases available over the problem page as well as manual test cases. It also generates corresponding code file for each problem according to the template.
 * It comes with a Judge which checks the program output and expected output. The Judge is also useful if problem involves Multiple Correct outputs. In this case user needs to specify the way Judge should judge the program output and expected output.  
