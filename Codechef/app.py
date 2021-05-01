@@ -68,7 +68,7 @@ contest_name = contest_name.split(";")[2].split("<")[0]
 def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contest_id):
 
 #https://codeforces.com/contest/1508/problem/F /home/devz/Desktop/Programs/Contest-Parser/Codeforces/Codeforces Round #715 (Div. 1)/F Optimal Encoding F Optimal Encoding 1508
-#https://www.codechef.com/SALC2021/problems/ALGOCUP46 /home/devz/Desktop/Programs/Contest-Parser/Codechef/Spider AlgoCup/6 Save Sattu 6 Save Sattu SALC2021
+#https://www.codechef.com/SALC2021/problems/ALGOCUP4 /home/devz/Desktop/Programs/Contest-Parser/Codechef/Spider AlgoCup/6 Save Sattu 6 Save Sattu SALC2021
     
     url = contest_problem_url
     
@@ -77,40 +77,59 @@ def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contes
 
     problemPage = browser.page_source
     
+    # <code class=" mathjax-support">5 3
+    #     1 5 3 9 4 
+    #     0 1
+    #     1 2
+    #     3 4
+    # </code>
     
+    #contest_name = re.findall(r"\/contests\/\"\>Compete\<\/a.*?\<\/aside\>", contestPage, re.DOTALL)[0]
     
+    allCodes2 = re.findall(r"\<code class\=\" mathjax\-support.*?\<\/code\>", problemPage, re.DOTALL)
+    
+    allCodes = []
+    
+    for a in allCodes2:
+        temp = a.split(">")[1].split("<")[0]
+        allCodes.append(temp)
+    
+    inp = []
+    out = []
+    
+    for code in range(len(allCodes)):
+        if code%2 == 0:
+            inp.append(allCodes[code])
+        else:
+            out.append(allCodes[code])
 
-    # inp = soup.findAll('div', attrs={"class" : "input"})
-    # out = soup.findAll('div', attrs={"class" : "output"})
+    input_folder_name = os.path.join(prob_folder_name, "Input")
+    output_folder_name = os.path.join(prob_folder_name, "Output")
 
-    # input_folder_name = os.path.join(prob_folder_name, "Input")
-    # output_folder_name = os.path.join(prob_folder_name, "Output")
+    # Creating Input and Output folder
+    os.mkdir(input_folder_name)
+    os.mkdir(output_folder_name)
 
-    # # Creating Input and Output folder
-    # os.mkdir(input_folder_name)
-    # os.mkdir(output_folder_name)
+    #Input in Input folder and Output in Output folder
+    for i in range(len(inp)):
+        i_file = "in"+str(i+1)+".txt"
+        o_file = "out"+str(i+1)+".txt"
+        i_file = os.path.join(input_folder_name,i_file)
+        o_file = os.path.join(output_folder_name,o_file)
+        test_in = open(i_file, "a")
+        test_out = open(o_file,"a")
 
-    # #Input in Input folder and Output in Output folder
-    # for i in range(len(inp)):
-    #     i_file = "in"+str(i+1)+".txt"
-    #     o_file = "out"+str(i+1)+".txt"
-    #     i_file = os.path.join(input_folder_name,i_file)
-    #     o_file = os.path.join(output_folder_name,o_file)
-    #     test_in = open(i_file, "a")
-    #     test_out = open(o_file,"a")
+        test_in.write(inp[i])
+        test_out.write(out[i])
 
-    #     test_in.write(inp[i].text[6:])
-    #     test_out.write(out[i].text[7:])
-
-    #     test_in.close()
-    #     test_out.close()
+        test_in.close()
+        test_out.close()
 
 
 # Create Problem folders
 def create_problem_folder(prob_no, prob_name,contest_problem_url,folder_name,extension,template_txt,contest_id,checker):
     prob_no = str(prob_no)
     print("Problem: "+str(prob_no)+". "+prob_name)
-    contest_problem_url = contest_problem_url +  prob_no
 
     # Problem Folder
     prob_folder_name = prob_no + " " + prob_name

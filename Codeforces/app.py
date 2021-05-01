@@ -66,9 +66,6 @@ def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contes
 
 # Create Problem folders
 def create_problem_folder(prob_no, prob_name,contest_problem_url,folder_name,extension,template_txt,contest_id,checker):
-    
-    print(prob_no, prob_name,contest_problem_url)
-    
     print("Problem: "+prob_no+". "+prob_name)
     contest_problem_url = contest_problem_url +  prob_no
 
