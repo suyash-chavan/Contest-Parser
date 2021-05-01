@@ -7,6 +7,10 @@ from termcolor import colored
 
 current_working_workspace = None
 
+def write_json(data, filename):
+    with open(filename,'w') as f:
+        json.dump(data, f, indent=4)
+
 def list_workspaces(para,need_data):
 	
 	try:
@@ -50,7 +54,9 @@ def create_workspace(para):
 		settings_file = open("settings.json","r")
 	except Exception:
 		print("Missing settings.json")
-		return 
+		return None
+
+	workspace_json = {}
 
 	settings = json.load(settings_file)
 	print()
@@ -62,17 +68,76 @@ def create_workspace(para):
 	for workspace in settings["workspaces"]:
 		if(workspace["name"]==workspace_name):
 			print("Workspace {} already exists!".format(workspace_name))
-			return 
+			return None
+
+	workspace_json["name"] = workspace_name
 
 	workspace_path = input("Enter Workspace Directory Path: ")
 
+	workspace_path.replace('~',"/home/")
+
+	for workspace in settings["workspaces"]:
+		if(workspace["path"]==workspace_path):
+			print("Workspace with path '{}' already exists!".format(workspace_path))
+			return None
+
 	if(os.path.isfile(workspace_path)):
 		print("Invalid Path!")
-		return 
+		return None
+
+	workspace_json["path"] = workspace_path
+
+	platform_table = PrettyTable()
+	platform_list = []
+
+	platform_table.field_names = ["ID","Platform"]
+
+	id = 1
+
+	for platform in settings["platforms"]:
+		platform_table.add_row([str(id),platform["name"]])
+		platform_list.append([id,platform["name"]])
+		id+=1
+
+	if(id==1):
+		print("No Supported Platform Found!")
+		return None
+
+	print(platform_table)
+
+	try:
+		platform_id = int(input("Enter Platform ID: "))
+	except Exception:
+		printf("Invalid ID!")
+		return None
+
+	max_id = len(platform_list)
+
+	if(platform_id<1 or platform_id>max_id):
+		printf("Invalid ID!")
+		return None
+
+	workspace_json["platform"] = platform_list[platform_id-1][1]
 
 	if(not os.path.isdir(workspace_path)):
-		return None
-		# Ask if you want yo create directory and if want create directory else return
+		mkdir(workspace_path)
+
+	"""
+		I need to get Programming language here, problem code template and cp snippets path here and add it in
+		workspace settings.json.
+	"""
+
+	# Now create workspace setting.json and update global settings.json
+	workspace_settings_path = workspace_path + "settings.json"
+
+	write_json(workspace_json, workspace_settings_path)
+
+	settings["workspaces"].append({"name": workspace_name,"path": workspace_path})
+
+	write_json(settings, "settings.json")
+
+	print("Workspace Created!")
+
 
 def set_workspace(para):
 	workspace_list = list_workspaces({},True)
@@ -127,6 +192,14 @@ def check_flags(user_flags, valid_flags):
 
 	return True
 
+def get_contest(para):
+	# Run generator here with flag as contest
+	return None
+
+def get_problem(para):
+	# Run generator here with flag as problem
+	return None
+
 def verify_and_execute(main_command,flag_parametres):
 
 	# Hardcoded valid main commands list
@@ -134,7 +207,9 @@ def verify_and_execute(main_command,flag_parametres):
 	valid_main_commands = {"list workspaces":{},
 						   "set workspace":{},
 						   "current workspace":{},
-						   "create workspace":{}}
+						   "create workspace":{},
+						   "get contest":{},
+						   "get problem":{}}
 
 	if(main_command not in valid_main_commands):
 		print("Invalid Command!")
@@ -170,6 +245,22 @@ def verify_and_execute(main_command,flag_parametres):
 		# Flag validity and type checking
 		if(check_flags(flag_parametres,valid_main_commands["create workspace"])):
 			create_workspace(flag_parametres)
+		else:
+			return None
+
+	elif(main_command=="get contest"):
+
+		# Flag validity and type checking
+		if(check_flags(flag_parametres,valid_main_commands["get contest"])):
+			get_problem(flag_parametres)
+		else:
+			return None
+
+	elif(main_command=="get problem"):
+
+		# Flag validity and type checking
+		if(check_flags(flag_parametres,valid_main_commands["get problem"])):
+			get_problem(flag_parametres)
 		else:
 			return None
 
