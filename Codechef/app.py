@@ -76,23 +76,17 @@ def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contes
     sleep(1)
 
     problemPage = browser.page_source
-    
-    # <code class=" mathjax-support">5 3
-    #     1 5 3 9 4 
-    #     0 1
-    #     1 2
-    #     3 4
-    # </code>
-    
-    #contest_name = re.findall(r"\/contests\/\"\>Compete\<\/a.*?\<\/aside\>", contestPage, re.DOTALL)[0]
-    
+ 
     allCodes2 = re.findall(r"\<code class\=\" mathjax\-support.*?\<\/code\>", problemPage, re.DOTALL)
     
     allCodes = []
     
     for a in allCodes2:
         temp = a.split(">")[1].split("<")[0]
-        allCodes.append(temp)
+        if temp.isspace() is False:
+            allCodes.append(temp)
+    
+    print(allCodes)
     
     inp = []
     out = []
@@ -216,6 +210,8 @@ for i in range(len(problems)):
     prob_no = i+1
     prob_folder_name = problemNames[i]
     contest_problem_url = problems[i]
-    create_problem_folder(prob_no,prob_folder_name,contest_problem_url,folder_name,extension,template_txt,contest_id,checker)
-
+    try:
+        create_problem_folder(prob_no,prob_folder_name,contest_problem_url,folder_name,extension,template_txt,contest_id,checker)
+    except:
+        pass
 browser.quit()
