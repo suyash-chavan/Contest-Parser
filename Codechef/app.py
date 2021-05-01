@@ -42,24 +42,23 @@ sleep(1)
 
 contestPage = browser.page_source
 
-f = open("demofile2.txt", "w")
-f.write(contestPage)
-f.close()
-
 # Get Contest Page
 lstOfProblemLinks = re.findall(r"class\=\"ember\-view\" href\=\"\/.*\<\/a\>", contestPage)
 
 # ignore 1st instance
 
+theProblemURLs = []
 
-#for i in lstOfProblemLinks:
-#    print(i)
-    
+for i in range(len(lstOfProblemLinks)):
+    if i == 0:
+        continue
+    theProblemURLs.append("https://www.codechef.com"+lstOfProblemLinks[i].split("\"")[3])
+
+print(theProblemURLs)
+
 browser.quit()
 # Problem URL for contest
 # contest_problem_url = 'https://www.codechef.com/{}/'.format(contest_id)
-
-
 
 # # Extract i/o statements for the problem
 # def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contest_id):
