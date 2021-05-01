@@ -11,8 +11,6 @@
     </p>
 </div>
 
-<br />
-
 # Contest Parser
 [![GitHub Issues](https://img.shields.io/github/issues/suyash-chavan/Contest-Parser)](https://github.com/suyash-chavan/Contest-Parser/issues)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
