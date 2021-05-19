@@ -14,7 +14,7 @@ def write_json(data, filename):
 def list_workspaces(para,need_data):
 	
 	try:
-		settings_file = open("settings.json","r")
+		settings_file = open("/etc/contest-parser/settings.json","r")
 	except Exception:
 		print("Missing settings.json")
 		return None
@@ -51,7 +51,7 @@ def list_workspaces(para,need_data):
 def create_workspace(para):
 	
 	try:
-		settings_file = open("settings.json","r")
+		settings_file = open("/etc/contest-parser/settings.json","r")
 	except Exception:
 		print("Missing settings.json")
 		return None
@@ -194,6 +194,7 @@ def check_flags(user_flags, valid_flags):
 
 def get_contest(para):
 	# Run generator here with flag as contest
+	os.system('python3 /etc/contest-parser/'+'Codeforces'+'/generator.py "'+current_working_workspace[2]+'"')
 	return None
 
 def get_problem(para):
@@ -252,7 +253,7 @@ def verify_and_execute(main_command,flag_parametres):
 
 		# Flag validity and type checking
 		if(check_flags(flag_parametres,valid_main_commands["get contest"])):
-			get_problem(flag_parametres)
+			get_contest(flag_parametres)
 		else:
 			return None
 

@@ -17,6 +17,16 @@ else
     echo "Creted Contest-Parser folder!"
 fi
 
+echo "Updating Judge!"
+cp judge.py /etc/contest-parser/judge.py
+
+
+FILE=/etc/contest-parser/settings.json
+if test -f "$FILE"; then
+    echo "$FILE exists."
+else
+	cp settings.json /etc/contest-parser/settings.json
+fi
 
 CODECHEF=/etc/contest-parser/Codechef
 echo "Updating Codechef Files!"

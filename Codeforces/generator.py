@@ -6,6 +6,8 @@ import re
 from bs4 import BeautifulSoup
 from termcolor import colored
 
+os.chdir(sys.argv[1])
+
 parent_path = os.getcwd()
 illegal = ["<", ">", "[", "]",  "?", ":", "*" , "|"]
 
@@ -86,7 +88,7 @@ def create_problem_folder(prob_no, prob_name,contest_problem_url,folder_name,ext
     fname.close()
 
 
-    file1 = os.path.join(prob_folder_name,"checker.py")
+    file1 = os.path.join(prob_folder_name,"judge.py")
     fname = open(file1,"a")
     fname.write(checker)
     fname.close()
@@ -140,7 +142,7 @@ template_txt = fname.read().strip()
 fname.close()
 
 # Parse the testcase checker
-fname = open('checker.py',"r")
+fname = open('/etc/contest-parser/judge.py',"r")
 checker = fname.read().strip()
 fname.close()
 
