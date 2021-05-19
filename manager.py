@@ -108,19 +108,19 @@ def create_workspace(para):
 	try:
 		platform_id = int(input("Enter Platform ID: "))
 	except Exception:
-		printf("Invalid ID!")
+		print("Invalid ID!")
 		return None
 
 	max_id = len(platform_list)
 
 	if(platform_id<1 or platform_id>max_id):
-		printf("Invalid ID!")
+		print("Invalid ID!")
 		return None
 
 	workspace_json["platform"] = platform_list[platform_id-1][1]
 
 	if(not os.path.isdir(workspace_path)):
-		mkdir(workspace_path)
+		os.mkdir(workspace_path)
 
 	"""
 		I need to get Programming language here, problem code template and cp snippets path here and add it in
