@@ -127,6 +127,9 @@ def create_workspace(para):
 		workspace settings.json.
 	"""
 
+	if(workspace_path[-1]!='/'):
+		workspace_path = workspace_path + "/"
+
 	# Now create workspace setting.json and update global settings.json
 	workspace_settings_path = workspace_path + "settings.json"
 
@@ -210,7 +213,9 @@ def verify_and_execute(main_command,flag_parametres):
 						   "current workspace":{},
 						   "create workspace":{},
 						   "get contest":{},
-						   "get problem":{}}
+						   "get problem":{},
+						   "backup current":{}
+						   }
 
 	if(main_command not in valid_main_commands):
 		print("Invalid Command!")
@@ -261,6 +266,14 @@ def verify_and_execute(main_command,flag_parametres):
 
 		# Flag validity and type checking
 		if(check_flags(flag_parametres,valid_main_commands["get problem"])):
+			get_problem(flag_parametres)
+		else:
+			return None
+
+	elif(main_command=="backup"):
+
+		# Flag validity and type checking
+		if(check_flags(flag_parametres,valid_main_commands["backup"])):
 			get_problem(flag_parametres)
 		else:
 			return None

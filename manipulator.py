@@ -1,5 +1,8 @@
+from manager import write_json
 import sys
 import os
+import datetime
+import json
 """
     Should be called to manipulate files. 
 """
@@ -28,10 +31,43 @@ def add_template(template_path, problem_path, line_no):
     """
     return None
 
-def backup_current(problem_path):
-    """
-        Create Backup of current Code.
-    """
+def backup_current(problem_path,problem_file_path):
+    
+    if(problem_path[-1]!="/"):
+        problem_path = problem_path+"/"
+
+    backup_folder_path = problem_path+"Backup/"
+
+    if(not os.path.exists(backup_folder_path)):
+        os.mkdir(backup_folder_path)
+
+    title = input("Title of Backup: ")
+    comments = input("Comments: ")
+
+    backup_no = (len([name for name in os.listdir(backup_folder_path) if os.path.isfile(name)])/2)+1
+
+    file_name = backup_folder_path+"backup"+str(backup_no)
+    detail_name = backup_folder_path+"details"+str(backup_no)+".json"
+
+    code = open(problem_file_path,"r")
+    backup_code = open(file_name,"a")
+
+    code_txt = code.read().strip()
+
+    code.close()
+
+    backup_code.write(code_txt)
+
+    backup_code.close()
+
+    details = {"title": title,
+               "comments": comments,
+               "timestamp": str(datetime.datetime.now())}
+    
+    write_json(details,detail_name)
+
+    print("\nBackup Created!")
+
     return None
 
 def get_backup(problem_path):
