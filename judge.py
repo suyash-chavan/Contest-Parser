@@ -75,3 +75,16 @@ for i in range(len(o_files)):
 	print(check(output,expected_output))
 
 	os.remove(temp_out_files[i])
+
+def main(command):
+	if("".join(str(x) for x in command).count("-a")>0):
+		"""
+			Need to run against all testcases
+		"""
+	else:
+		"""
+			Need to run against some testcases
+		"""
+
+if __name__=="__main__":
+	main(sys.argv[1:])

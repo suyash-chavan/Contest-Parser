@@ -8,9 +8,50 @@ import json
 """
 
 def add_testcase(problem_path):
-    """
-        I have problem path here. Create a new testcase.
-    """
+
+    print("Enter TestCase Input: (Press Enter at Blank Line to Complete it)")
+    testcase_input = ""
+    number_of_empty_responses = 0
+
+    while(True):
+        line = input()
+
+        if line=="":
+            number_of_empty_responses+=1
+            if number_of_empty_responses == 2:
+                break
+        else:
+            testcase_input = testcase_input+"\n"+line
+            number_of_empty_responses=0
+
+    print("Enter TestCase Output: (Press Enter at Blank Line to Complete it)")
+    testcase_output = ""
+    number_of_empty_responses = 0
+
+    while(True):
+        line = input()
+
+        if line=="":
+            number_of_empty_responses+=1
+            if number_of_empty_responses == 2:
+                break
+        else:
+            testcase_output = testcase_output+"\n"+line
+            number_of_empty_responses=0
+    
+    testcase_no = len([name for name in os.listdir(problem_path+"/Input") if os.path.isfile(os.path.join(problem_path+"/Input", name))])
+
+    print("Creating Testcase...")
+
+    testcase_in = open(problem_path+"/Input/"+"in"+str(testcase_no)+".txt","w+")
+    testcase_out = open(problem_path+"/Output/"+"out"+str(testcase_no)+".txt","w+")
+
+    testcase_in.write(testcase_input)
+    testcase_out.write(testcase_output)
+
+    testcase_in.close()
+    testcase_out.close()
+
     return None
 
 def view_testcase(problem_path, number):
